@@ -1,15 +1,21 @@
 import Fastify from 'fastify';
+import AutoLoad from '@fastify/autoload';
+import { join } from 'node:path';
 
-const fastify = Fastify({logger: true});
+const fastify = Fastify({ logger: true });
 
-fastify.get("/", async (request, reply) => {
-  return 'pong';
 });
 
-fastify.listen({ port: 8080 }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log(`Server listening at ${address}`);
+void fastify.register(AutoLoad, {
+  dir: join(__dirname, 'routes'),
+  indexPattern: /.*routes\.ts/i,
+  ignorePattern: /.*\.ts/,
+  autoHooksPattern: /.*,hook\.ts/i,
+  autoHooks: true,
+  cascadeHooks: true,
+});
+
+fastify.listen({ host: '0.0.0.0', port: 8080 }).catch((err) => {
+  fastify.log.error(err);
+  process.exit(1);
 });
