@@ -1,16 +1,16 @@
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import { MikroORM } from '@mikro-orm/postgresql';
+import ORMConfig from '../mikro-orm.config';
 
 const microORM: FastifyPluginAsync = async function (fastify) {
   const orm = await MikroORM.init({
-    entities: ['dist/entities/**/*.js'],
-    entitiesTs: ['src/entities/**/*.ts'],
+    ...ORMConfig,
     password: fastify.config.POSTGRES_PASSWORD,
-    user: fastify.config.POSTGRES_USER,
     port: fastify.config.POSTGRES_PORT,
+    user: fastify.config.POSTGRES_USER,
     host: fastify.config.POSTGRES_HOST,
-    dbName: 'pokemon',
+    debug: true,
   });
 
   fastify.decorate('mikroORM', { orm });

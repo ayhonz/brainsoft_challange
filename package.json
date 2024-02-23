@@ -3,14 +3,24 @@
   "packageManager": "yarn@4.1.0",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsx watch src/index.ts | pino-pretty"
+    "dev": "tsx watch src/index.ts | pino-pretty",
+    "migration:up": "node --env-file=.env node_modules/.bin/mikro-orm migration:up",
+    "migration:create": "node --env-file=.env node_modules/.bin/mikro-orm migration:create",
+    "migration:down": "node --env-file=.env node_modules/.bin/mikro-orm migration:down",
+    "migration:fresh": "node --env-file=.env node_modules/.bin/mikro-orm migration:fresh",
+    "seeder:create": "node --env-file=.env node_modules/.bin/mikro-orm seeder:create",
+    "seeder:run": "node --env-file=.env node_modules/.bin/mikro-orm seeder:run"
   },
   "dependencies": {
     "@fastify/autoload": "^5.8.0",
     "@fastify/env": "^4.3.0",
     "@fastify/type-provider-typebox": "^4.0.0",
-    "@mikro-orm/core": "^6.1.4",
-    "@mikro-orm/postgresql": "^6.1.4",
+    "@mikro-orm/cli": "^6.1.5",
+    "@mikro-orm/core": "^6.1.5",
+    "@mikro-orm/migrations": "^6.1.5",
+    "@mikro-orm/postgresql": "^6.1.5",
+    "@mikro-orm/reflection": "^6.1.5",
+    "@mikro-orm/seeder": "^6.1.5",
     "fastify": "^4.26.1",
     "fastify-plugin": "^4.5.1"
   },
@@ -24,6 +34,7 @@
     "jest": "^29.7.0",
     "pino-pretty": "^10.3.1",
     "prettier": "3.2.5",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"
   },
