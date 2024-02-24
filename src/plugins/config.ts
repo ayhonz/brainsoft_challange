@@ -6,7 +6,7 @@ const schema = {
   type: 'object',
   required: [
     'PORT',
-    // 'HOST',
+    'HOST',
     'POSTGRES_HOST',
     'POSTGRES_USER',
     'POSTGRES_PASSWORD',
@@ -14,6 +14,7 @@ const schema = {
   ],
   properties: {
     PORT: { type: 'string', default: '3000' },
+    HOST: { type: 'string', default: 'localhost' },
     POSTGRES_PORT: { type: 'string', default: '3000' },
     POSTGRES_PASSWORD: { type: 'string' },
     POSTGRES_USER: { type: 'string' },

@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.1.0",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsx watch src/index.ts | pino-pretty",
+    "dev": "tsx watch src/server.ts | pino-pretty",
     "migration:up": "node --env-file=.env node_modules/.bin/mikro-orm migration:up",
     "migration:create": "node --env-file=.env node_modules/.bin/mikro-orm migration:create",
     "migration:down": "node --env-file=.env node_modules/.bin/mikro-orm migration:down",

@@ -6,7 +6,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     config: {
       PORT: number;
-      // HOST: string;
+      HOST: string;
       POSTGRES_HOST: string;
       POSTGRES_USER: string;
       POSTGRES_PASSWORD: string;
