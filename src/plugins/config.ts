@@ -11,14 +11,16 @@ const schema = {
     'POSTGRES_USER',
     'POSTGRES_PASSWORD',
     'POSTGRES_PORT',
+    'NODE_ENV',
   ],
   properties: {
     PORT: { type: 'string', default: '3000' },
     HOST: { type: 'string', default: 'localhost' },
-    POSTGRES_PORT: { type: 'string', default: '3000' },
+    POSTGRES_PORT: { type: 'string' },
     POSTGRES_PASSWORD: { type: 'string' },
     POSTGRES_USER: { type: 'string' },
     POSTGRES_HOST: { type: 'string' },
+    NODE_ENV: { type: 'string', default: 'development' },
   },
 };
 

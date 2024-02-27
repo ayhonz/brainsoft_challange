@@ -1,26 +1,37 @@
+import { type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
+import { Type } from '@sinclair/typebox';
 import {
-  type FastifyPluginAsyncTypebox,
-  Type,
-} from '@fastify/type-provider-typebox';
+  listQueryStringSchema,
+  PokemonSchema,
+  TypeSchema,
+} from './schemas/pokemonSchema';
+import { TypeEntity } from '../../entities/type.entity';
+
+export const FilterType = Type.Object({
+  filter: Type.Partial(
+    Type.Object({
+      type: Type.String({ description: 'Filter by pokemon type' }),
+    }),
+  ),
+});
 
 const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
   fastify.get(
     '/',
     {
       schema: {
-        querystring: Type.Object({
-          name: Type.String({ default: 'world', description: 'Pass Name' }),
-        }),
+        querystring: listQueryStringSchema,
         response: {
-          200: Type.Object({
-            hello: Type.String(),
-          }),
+          200: {
+            data: Type.Array(PokemonSchema),
+          },
         },
       },
     },
-    (req) => {
-      const { name } = req.query;
-      return { hello: name };
+    async (request) => {
+      const pokemons = await request.pokemonSource.getList(request.query);
+
+      return { data: pokemons };
     },
   );
 
@@ -29,18 +40,28 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
     {
       schema: {
         params: Type.Object({
-          id: Type.String({ description: 'Pass ID' }),
+          id: Type.Number({ description: 'Pokemon Id' }),
         }),
         response: {
-          200: Type.Object({
-            id: Type.String(),
-          }),
+          200: {
+            data: PokemonSchema,
+          },
+          404: {
+            error: Type.String({ description: 'Pokemon not found' }),
+          },
         },
       },
     },
-    (request) => {
+    async (request, reply) => {
       const { id } = request.params;
-      return { id: id };
+      const pokemon = await request.pokemonSource.getById(id);
+      if (!pokemon) {
+        void reply.status(404);
+        return { error: 'Pokemon not found' };
+      }
+
+      fastify.log.info(JSON.parse(JSON.stringify(pokemon)));
+      return { data: pokemon };
     },
   );
 
@@ -49,17 +70,28 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
     {
       schema: {
         params: Type.Object({
-          name: Type.String({ description: 'Pass Name' }),
+          name: Type.String({ description: 'Pokemon Name' }),
         }),
         response: {
-          200: Type.Object({
-            name: Type.String(),
-          }),
+          200: {
+            data: PokemonSchema,
+          },
+          404: {
+            error: Type.String(),
+          },
         },
       },
     },
-    (request) => {
-      return { name: request.params.name };
+    async (request, reply) => {
+      const { name } = request.params;
+      const pokemon = await request.pokemonSource.getByName(name);
+      if (!pokemon) {
+        void reply.status(404);
+        return { error: 'Pokemon not found' };
+      }
+
+      fastify.log.info(JSON.parse(JSON.stringify(pokemon)));
+      return { data: pokemon };
     },
   );
 
@@ -68,12 +100,22 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
     {
       schema: {
         response: {
-          200: Type.Array(Type.String()),
+          200: {
+            data: Type.Array(TypeSchema),
+          },
+          404: {
+            error: Type.String(),
+          },
         },
       },
     },
-    () => {
-      return ['fire', 'water', 'grass'];
+    async (request) => {
+      const types = await request.mikroORM.orm.em.find(TypeEntity, {});
+      if (types.length === 0) {
+        return { error: 'Types not found' };
+      }
+
+      return { data: types };
     },
   );
 };

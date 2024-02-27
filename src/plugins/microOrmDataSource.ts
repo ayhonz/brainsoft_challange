@@ -4,14 +4,19 @@ import { MikroORM } from '@mikro-orm/postgresql';
 import ORMConfig from '../mikro-orm.config';
 
 const microORM: FastifyPluginAsync = async function (fastify) {
-  const orm = await MikroORM.init({
+  const config = {
     ...ORMConfig,
     password: fastify.config.POSTGRES_PASSWORD,
     port: fastify.config.POSTGRES_PORT,
     user: fastify.config.POSTGRES_USER,
     host: fastify.config.POSTGRES_HOST,
-    debug: true,
-  });
+  };
+
+  if (fastify.config.NODE_ENV === 'development') {
+    config.debug = true;
+  }
+
+  const orm = await MikroORM.init(config);
 
   fastify.decorate('mikroORM', { orm });
 
