@@ -11,6 +11,8 @@ import {
 } from '@mikro-orm/core';
 import { TypeEntity } from './type.entity';
 import { AttackEntity } from './attack.entity';
+import { UserEntity } from './user.entity';
+import { BaseEntity } from './base.entity';
 
 export enum PokemonClass {
   LEGENDARY = 'legendary',
@@ -54,7 +56,7 @@ export class Evolution {
 }
 
 @Entity()
-export class PokemonEntity {
+export class PokemonEntity extends BaseEntity {
   @PrimaryKey({ unique: true })
   id!: number;
 
@@ -83,7 +85,7 @@ export class PokemonEntity {
   weight!: Weight;
 
   @Embedded(() => EvolutionRequirements, { object: true })
-  EvolutionRequirements?: EvolutionRequirements;
+  evolutionRequirements?: EvolutionRequirements;
 
   @Embedded(() => Evolution, { array: true })
   evolutions?: Evolution[];
@@ -108,4 +110,7 @@ export class PokemonEntity {
 
   @Enum({ items: () => PokemonClass, nullable: true })
   class?: PokemonClass;
+
+  @ManyToMany({ mappedBy: 'favoritePokemons' })
+  favoredBy = new Collection<UserEntity>(this);
 }

@@ -32,7 +32,7 @@ export const PokemonSchema = Type.Object({
   fastAttack: Type.Array(AttackSchema),
   specialAttack: Type.Array(AttackSchema),
   commonCaptureArea: Type.String(),
-  EvolutionRequirements: Type.Object({
+  evolutionRequirements: Type.Object({
     amount: Type.Optional(Type.Number()),
     name: Type.Optional(Type.String()),
   }),

@@ -7,9 +7,10 @@ import {
 } from '@mikro-orm/core';
 import { PokemonEntity } from './pokemon.entity';
 import { TypeEntity } from './type.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity()
-export class AttackEntity {
+export class AttackEntity extends BaseEntity {
   @PrimaryKey({ autoincrement: true })
   id!: number;
 
