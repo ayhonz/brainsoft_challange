@@ -60,5 +60,8 @@ export const listQueryStringSchema = Type.Partial(
     name: Type.String({ description: 'Filter by pokemon name', default: '' }),
     limit: Type.Number({ description: 'Pagination limit' }),
     offset: Type.Number({ description: 'Pagination offset' }),
+    favorite: Type.Boolean({
+      description: 'Filter by favorite pokemons (only for authorized user)',
+    }),
   }),
 );

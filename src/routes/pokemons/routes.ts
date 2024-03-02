@@ -21,15 +21,26 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
     {
       schema: {
         querystring: listQueryStringSchema,
+        headers: Type.Object({
+          authorization: Type.Optional(Type.String()),
+        }),
         response: {
           200: {
             data: Type.Array(PokemonSchema),
           },
         },
       },
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      preHandler: fastify.auth([
+        fastify.allowAnonymous,
+        fastify.authorization,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+      ]) as any,
     },
     async (request) => {
-      const pokemons = await request.pokemonSource.getList(request.query);
+      fastify.log.info('Getting pokemons');
+      fastify.log.info(request.query);
+      const pokemons = await request.pokemonSource.getList(request);
 
       return { data: pokemons };
     },

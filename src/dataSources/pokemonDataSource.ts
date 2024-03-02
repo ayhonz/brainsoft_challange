@@ -21,8 +21,8 @@ export class PokemonDataSource {
     return allTypes.filter((type) => type);
   }
 
-  async getList(params: ListingQuery) {
-    const { limit = 10, offset = 0, ...filter } = params;
+  async getList(req: ListingQuery) {
+    const { limit = 10, offset = 0, ...filter } = req.query;
     const allTypes = this.extractTypes(filter.types);
 
     const whereFilter = {
@@ -38,6 +38,12 @@ export class PokemonDataSource {
           delete whereFilter[key];
         }
       }
+    }
+
+    if (filter.favorite && req.user) {
+      await req.user.favoritePokemons.init();
+      const pokemonIds = req.user.favoritePokemons.getIdentifiers();
+      whereFilter['id'] = { $in: pokemonIds };
     }
 
     const pokemons = await this.em.find(PokemonEntity, whereFilter, {
