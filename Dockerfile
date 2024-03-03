@@ -16,10 +16,10 @@ COPY --chown=node:node --from=builder /build/node_modules $APP_HOME/node_modules
 # set user to be the least priviledged
 USER node
 
-EXPOSE 3000
+EXPOSE 8080
 WORKDIR home/app/node
 
 # use dunb-init to nut run the app as PID 1
 ENTRYPOINT ["dumb-init"]
 # using node to run the app istead of yarn so that signals are sent correcrtly 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/server.js"]

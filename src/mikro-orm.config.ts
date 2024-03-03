@@ -13,8 +13,14 @@ export default defineConfig({
   dbName: 'pokemon',
   metadataProvider: TsMorphMetadataProvider,
   extensions: [SeedManager, Migrator],
+  migrations: {
+    path: 'dist/migrations',
+    pathTs: 'src/migrations',
+    emit: 'ts',
+  },
   seeder: {
-    path: 'src/seeds',
+    pathTs: 'src/seeds',
+    path: 'dist/seeds',
     defaultSeeder: 'DatabaseSeeder',
     glob: '!(*.d).{js,ts}', // how to match seeder files (all .js and .ts files, but not .d.ts)
     emit: 'ts',
