@@ -2,7 +2,6 @@ import {
   type FastifyPluginAsyncTypebox,
   Type,
 } from '@fastify/type-provider-typebox';
-import { UserEntity } from '../../entities/user.entity';
 import { UniqueConstraintViolationException } from '@mikro-orm/core';
 import { PokemonEntity } from '../../entities/pokemon.entity';
 
@@ -86,7 +85,6 @@ const usersRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
     async (request, reply) => {
       try {
         const { pokemonId } = request.params;
-        request.log.info('Removing favorite');
 
         await request.user.favoritePokemons.init();
         const favoriteForDeletion = request.user.favoritePokemons.find(

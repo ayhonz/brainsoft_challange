@@ -38,8 +38,6 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
       ]) as any,
     },
     async (request) => {
-      fastify.log.info('Getting pokemons');
-      fastify.log.info(request.query);
       const pokemons = await request.pokemonSource.getList(request);
 
       return { data: pokemons };
@@ -71,7 +69,6 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
         return { error: 'Pokemon not found' };
       }
 
-      fastify.log.info(JSON.parse(JSON.stringify(pokemon)));
       return { data: pokemon };
     },
   );
@@ -101,7 +98,6 @@ const pokenomRoutes: FastifyPluginAsyncTypebox = async function (fastify) {
         return { error: 'Pokemon not found' };
       }
 
-      fastify.log.info(JSON.parse(JSON.stringify(pokemon)));
       return { data: pokemon };
     },
   );
