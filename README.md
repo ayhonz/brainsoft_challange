@@ -4,7 +4,7 @@ The Pokémon API allows browsing the catalog of Pokémon and marking them as fav
 
 ## Requirements
 
-- Node.js 14.6.2 (nvm recommended)
+- Node.js 21.6.2 (nvm recommended)
 - Yarn
 - Docker
 

@@ -12,6 +12,7 @@ ENV APP_HOME=$HOME/node
 
 COPY --chown=node:node --from=builder /build/dist $APP_HOME/dist
 COPY --chown=node:node --from=builder /build/node_modules $APP_HOME/node_modules
+COPY --chown=node:node --from=builder /build/package.json $APP_HOME/package.json
 
 # set user to be the least priviledged
 USER node
